@@ -1,10 +1,9 @@
 /* =========================================
    1. GLOBAL & MOBILE BASE STYLES
-   ... (unchanged) ...
    ========================================= */
 :root {
-    --card-width: 400px;
-    --card-height: 600px;
+    --card-width: 450px; /* INCREASED width for more content space */
+    --card-height: 650px; /* INCREASED height for more content space */
     --red-primary: #ff4d4d;
     --pink-secondary: #ff9ff3;
     --blue-accent: #1e90ff;
@@ -35,9 +34,7 @@ body {
 
 /* =========================================
    2. SPLASH SCREEN STYLING
-   ... (unchanged) ...
    ========================================= */
-
 #splash-screen {
     position: fixed;
     top: 0;
@@ -88,9 +85,7 @@ body {
 
 /* =========================================
    3. CARD STRUCTURE & 3D FLIPPING
-   ... (unchanged) ...
    ========================================= */
-
 .card-wrapper {
     width: var(--card-width);
     height: var(--card-height);
@@ -113,6 +108,7 @@ body {
     transform: translateZ(-2px);
 }
 
+/* Base style for every page */
 .page {
     position: absolute;
     width: 100%;
@@ -126,42 +122,49 @@ body {
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
     cursor: pointer;
 
+    /* CRITICAL FIX FOR BLEEDING CONTENT */
     transform: translateZ(0); 
     will-change: transform;
 }
 
+/* Z-index for stacking order (Page 1 is on top) */
 #page-1 { z-index: 5; }
 #page-2 { z-index: 4; }
 #page-3 { z-index: 3; }
 #page-4 { z-index: 2; }
 #page-5 { z-index: 1; }
 
+/* Class added by JavaScript to flip a page */
 .page.is-flipped {
     transform: rotateY(-180deg) translateZ(0); 
 }
 
 /* =========================================
    4. PAGE CONTENT STYLING
-   ... (unchanged) ...
    ========================================= */
-
 .page-content {
     padding: 30px;
     height: 100%;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    
+    /* Align content to the top for poem/message pages */
     justify-content: flex-start;
+    
     align-items: center;
     text-align: center;
 }
 
+/* New rule for the pink background on Page 2 (main poem) */
 .new-background {
     background-color: #ffe6f2; /* Soft Pink Background */
 }
 
+/* Page 1 (Cover) */
 .cover-page {
     background: linear-gradient(to top right, #ffe6e6, #ffcccc);
+    /* Re-center content on the cover page */
     justify-content: center;
 }
 
@@ -176,6 +179,7 @@ body {
     color: var(--red-primary);
 }
 
+/* Message Pages (Page 2, 3) */
 .main-message p {
     margin-bottom: 15px;
     line-height: 1.6;
@@ -189,6 +193,7 @@ body {
     font-size: 1.8em;
 }
 
+/* Photo Page (Page 4) */
 .card-photo {
     max-width: 100%;
     height: auto;
@@ -197,6 +202,7 @@ body {
     margin-bottom: 15px;
 }
 
+/* Back Cover (Page 5) */
 .back-cover {
     background-color: #eee;
     justify-content: space-around;
@@ -231,7 +237,6 @@ body {
     height: 100%;
     pointer-events: none;
     overflow: hidden;
-    /* *** Increased Z-Index for max priority *** */
     z-index: 500; 
 }
 
@@ -253,12 +258,14 @@ body {
 /* Balloon base style (for JS injection) */
 .balloon {
     position: absolute;
-    width: 120px; 
-    height: 160px; 
+    /* *** INCREASED SIZE *** */
+    width: 140px; 
+    height: 180px; 
+    /* ********************* */
     background-color: var(--red-primary);
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
     bottom: -100px;
-    animation: rise 10s linear forwards;
+    animation: rise 10s linear forwards; /* Slower rise */
     opacity: 0.8;
     pointer-events: auto;
     cursor: pointer;
@@ -270,17 +277,16 @@ body {
 }
 
 .balloon::after {
-    /* *** FINAL FIX FOR STRING VISIBILITY *** */
+    /* String */
     content: '';
     position: absolute;
     width: 2px;
-    height: 80px; /* Increased height */
-    background-color: rgba(0, 0, 0, 0.5); /* Clearer color */
+    height: 80px; 
+    background-color: rgba(0, 0, 0, 0.5); 
     
-    top: 98%; /* Start right at the base of the balloon */
+    top: 98%; 
     left: calc(50% - 1px);
     
-    /* Push the string slightly back in Z-space so it renders correctly */
     transform: translateZ(-5px); 
 }
 
@@ -301,7 +307,7 @@ body {
     top: 100px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 550; /* Ensure it's above everything */
+    z-index: 550;
     pointer-events: none;
     display: flex;
     flex-direction: column;
@@ -409,11 +415,13 @@ body {
 @keyframes textRiseAndFade {
     0% {
         opacity: 0;
-        transform: translateY(200px) scale(0.8);
+        /* Start position adjusted to push animation higher */
+        transform: translateY(400px) scale(0.8); 
     }
     10% {
         opacity: 1;
-        transform: translateY(0px) scale(1);
+        /* Final position (center point) */
+        transform: translateY(0px) scale(1); 
     }
     90% {
         opacity: 1;
@@ -421,6 +429,7 @@ body {
     }
     100% {
         opacity: 0;
-        transform: translateY(-200px) scale(0.8); 
+        /* End position adjusted */
+        transform: translateY(-400px) scale(0.8); 
     }
 }
