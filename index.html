@@ -1,1 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 24th Birthday, Babe!</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
 
+    <audio id="birthday-music" src="assets/music.mp3" loop></audio>
+    <audio id="pop-sound" src="assets/pop.mp3"></audio>
+
+    <div id="splash-screen" class="screen active-screen">
+        <h1 class="splash-text">Happy Birthday!</h1>
+        <div class="decoration cake-decoration"></div>
+        <div class="decoration lights-decoration"></div>
+        <p class="tap-prompt">Tap anywhere to start the music</p>
+    </div>
+
+    <div id="card-wrapper" class="card-wrapper hidden">
+        <div class="card-spine"></div>
+        
+        <div class="page" id="page-5">
+            <div class="page-content back-cover">
+                <p>Thanks for coming into my life and lightening it.</p>
+                <button id="close-card-btn" class="action-btn">Close Card</button>
+            </div>
+        </div>
+
+        <div class="page" id="page-4">
+            <div class="page-content photo-page">
+                <img src="assets/birthday-photo-1.jpg" alt="A lovely photo" class="card-photo">
+                <p class="photo-caption">A memory to cherish.</p>
+                <p class="tap-prompt">Tap to continue...</p>
+            </div>
+        </div>
+
+        <div class="page" id="page-3">
+            <div class="page-content message-page">
+                <p>May your heart always find reasons to sing and your spirit remain forever bright!</p>
+                <p class="tap-prompt">Tap to continue...</p>
+            </div>
+        </div>
+
+        <div class="page" id="page-2">
+            <div class="page-content message-page main-message">
+                <p>Today, I send you all my best wishes.</p>
+                <p>May the things that bring you down also become reasons for you to continue growing.</p>
+                <p>May the world always protect you wherever you are.</p>
+                <p>May your days be filled with boundless love.</p>
+                <p>May every step you take be made easy until you achieve what you desire.</p>
+                <hr>
+                <h2>Happy 24th Birthday Babe</h2>
+                <p class="tap-prompt">Tap to continue...</p>
+            </div>
+        </div>
+
+        <div class="page active-page" id="page-1">
+            <div class="page-content cover-page">
+                <div class="cake-illustration">
+                    </div>
+                <h2 class="cover-text">Open Me!</h2>
+            </div>
+        </div>
+        
+    </div>
+
+    <div id="final-celebration" class="final-celebration">
+        </div>
+
+
+    <script src="script.js"></script> 
+</body>
+</html>
