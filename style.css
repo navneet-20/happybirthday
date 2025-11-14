@@ -258,7 +258,7 @@ body {
     background-color: var(--red-primary);
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
     bottom: -100px;
-    animation: rise 5s linear forwards;
+    animation: rise 10s linear forwards;
     opacity: 0.8;
     pointer-events: auto;
     cursor: pointer;
