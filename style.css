@@ -1,1 +1,273 @@
+/* =========================================
+   1. GLOBAL & MOBILE BASE STYLES
+   ========================================= */
+:root {
+    --card-width: 300px;
+    --card-height: 450px;
+    --red-primary: #ff4d4d;
+    --pink-secondary: #ff9ff3;
+    --blue-accent: #1e90ff;
+}
 
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f7d794; /* Light festive background */
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden; /* Hide scrollbars, especially for animations */
+    perspective: 1000px; /* Needed for 3D transforms */
+}
+
+/* Ensure content fills the mobile screen nicely */
+@media (max-width: 600px) {
+    body {
+        min-height: -webkit-fill-available; /* Better mobile height support */
+    }
+}
+
+/* =========================================
+   2. SPLASH SCREEN STYLING
+   ========================================= */
+#splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--red-primary) 0%, var(--pink-secondary) 100%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+    cursor: pointer;
+}
+
+#splash-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.splash-text {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    animation: pulse 1.5s infinite;
+}
+
+.tap-prompt {
+    position: absolute;
+    bottom: 50px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+/* Simple placeholder for decorations */
+.decoration {
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+}
+
+.cake-decoration { background: url('assets/cake-icon.svg') center/80% no-repeat; }
+.lights-decoration { background: url('assets/lights-icon.svg') center/80% no-repeat; }
+
+
+/* =========================================
+   3. CARD STRUCTURE & 3D FLIPPING
+   ========================================= */
+.card-wrapper {
+    width: var(--card-width);
+    height: var(--card-height);
+    position: relative;
+    transform-style: preserve-3d; /* Key for 3D effect */
+    transition: transform 1s; /* Overall transition for when card might move */
+}
+
+.card-wrapper.hidden {
+    display: none;
+}
+
+/* The fixed spine of the book */
+.card-spine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px; /* Visual thickness of the spine */
+    height: 100%;
+    background-color: #a04444; /* Dark red spine color */
+    transform: translateZ(-2px); /* Place slightly behind the pages */
+}
+
+/* Base style for every page */
+.page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-left: none; /* Pages meet the spine */
+    transform-origin: left center; /* **CRITICAL**: Pages flip from the left edge */
+    transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Nice flipping animation curve */
+    backface-visibility: hidden; /* Prevent content on the back of the flipped page from showing */
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+/* Z-index for stacking order (Page 1 is on top) */
+#page-1 { z-index: 5; }
+#page-2 { z-index: 4; }
+#page-3 { z-index: 3; }
+#page-4 { z-index: 2; }
+#page-5 { z-index: 1; }
+
+/* Class added by JavaScript to flip a page */
+.page.is-flipped {
+    transform: rotateY(-180deg);
+}
+
+
+/* =========================================
+   4. PAGE CONTENT STYLING
+   ========================================= */
+.page-content {
+    padding: 30px;
+    height: 100%;
+    overflow-y: auto; /* Allow scrolling if content is long on smaller screens */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* Page 1 (Cover) */
+.cover-page {
+    background: linear-gradient(to top right, #ffe6e6, #ffcccc);
+}
+
+.cake-illustration {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+    /* Placeholder for cake image/SVG */
+    background: url('assets/cake.png') center/contain no-repeat; 
+}
+
+.cover-text {
+    color: var(--red-primary);
+}
+
+/* Message Pages (Page 2, 3) */
+.main-message p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+    color: #333;
+    font-size: 1em;
+}
+
+.main-message h2 {
+    color: var(--blue-accent);
+    margin-top: 20px;
+    font-size: 1.8em;
+}
+
+/* Photo Page (Page 4) */
+.card-photo {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+}
+
+/* Back Cover (Page 5) */
+.back-cover {
+    background-color: #eee;
+    justify-content: space-around;
+}
+
+.action-btn {
+    padding: 10px 20px;
+    background-color: var(--red-primary);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    box-shadow: 0 4px #c23939;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.action-btn:active {
+    background-color: #c23939;
+    box-shadow: 0 2px #962c2c;
+    transform: translateY(2px);
+}
+
+/* =========================================
+   5. FINAL CELEBRATION (Balloons & Confetti)
+   ========================================= */
+.final-celebration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Allow clicks to pass through */
+    overflow: hidden;
+    z-index: 200;
+}
+
+/* Balloon base style (for JS injection) */
+.balloon {
+    position: absolute;
+    width: 60px;
+    height: 80px;
+    background-color: var(--red-primary); /* Color will change via JS */
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    bottom: -100px; /* Start off-screen */
+    animation: rise 5s linear forwards;
+    opacity: 0.8;
+}
+
+.balloon::after {
+    /* String */
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.3);
+    top: 100%;
+    left: calc(50% - 1px);
+}
+
+/* Keyframe for Balloon Rising */
+@keyframes rise {
+    from {
+        transform: translateY(0) rotate(0deg);
+    }
+    to {
+        transform: translateY(-100vh) rotate(5deg);
+        opacity: 0.1;
+    }
+}
+
+/* Keyframe for splash screen pulse */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
