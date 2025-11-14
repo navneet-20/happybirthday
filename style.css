@@ -2,8 +2,8 @@
    1. GLOBAL & MOBILE BASE STYLES
    ========================================= */
 :root {
-    --card-width: 300px;
-    --card-height: 450px;
+    --card-width: 400px; /* INCREASED width for more content space */
+    --card-height: 600px; /* INCREASED height for more content space */
     --red-primary: #ff4d4d;
     --pink-secondary: #ff9ff3;
     --blue-accent: #1e90ff;
@@ -16,20 +16,19 @@
 }
 
 body {
-    background-color: #f7d794; /* Light festive background */
+    background-color: #f7d794; 
     font-family: 'Arial', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    overflow: hidden; /* Hide scrollbars, especially for animations */
-    perspective: 1000px; /* Needed for 3D transforms */
+    overflow: hidden;
+    perspective: 1000px;
 }
 
-/* Ensure content fills the mobile screen nicely */
 @media (max-width: 600px) {
     body {
-        min-height: -webkit-fill-available; /* Better mobile height support */
+        min-height: -webkit-fill-available;
     }
 }
 
@@ -72,7 +71,6 @@ body {
     opacity: 0.8;
 }
 
-/* Simple placeholder for decorations */
 .decoration {
     width: 100px;
     height: 100px;
@@ -92,23 +90,22 @@ body {
     width: var(--card-width);
     height: var(--card-height);
     position: relative;
-    transform-style: preserve-3d; /* Key for 3D effect */
-    transition: transform 1s; /* Overall transition for when card might move */
+    transform-style: preserve-3d;
+    transition: transform 0.5s; 
 }
 
 .card-wrapper.hidden {
     display: none;
 }
 
-/* The fixed spine of the book */
 .card-spine {
     position: absolute;
     top: 0;
     left: 0;
-    width: 5px; /* Visual thickness of the spine */
+    width: 5px;
     height: 100%;
-    background-color: #a04444; /* Dark red spine color */
-    transform: translateZ(-2px); /* Place slightly behind the pages */
+    background-color: #a04444;
+    transform: translateZ(-2px);
 }
 
 /* Base style for every page */
@@ -118,12 +115,16 @@ body {
     height: 100%;
     background-color: white;
     border: 1px solid #ddd;
-    border-left: none; /* Pages meet the spine */
-    transform-origin: left center; /* **CRITICAL**: Pages flip from the left edge */
-    transition: transform 1s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Nice flipping animation curve */
-    backface-visibility: hidden; /* Prevent content on the back of the flipped page from showing */
+    border-left: none;
+    transform-origin: left center;
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    backface-visibility: hidden;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+
+    /* CRITICAL FIX FOR BLEEDING CONTENT */
+    transform: translateZ(0); 
+    will-change: transform;
 }
 
 /* Z-index for stacking order (Page 1 is on top) */
@@ -135,9 +136,8 @@ body {
 
 /* Class added by JavaScript to flip a page */
 .page.is-flipped {
-    transform: rotateY(-180deg);
+    transform: rotateY(-180deg) translateZ(0); 
 }
-
 
 /* =========================================
    4. PAGE CONTENT STYLING
@@ -145,24 +145,33 @@ body {
 .page-content {
     padding: 30px;
     height: 100%;
-    overflow-y: auto; /* Allow scrolling if content is long on smaller screens */
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    
+    /* FIX: Align content to the top for poem/message pages */
+    justify-content: flex-start;
+    
     align-items: center;
     text-align: center;
+}
+
+/* New rule for the pink background on Page 2 (main poem) */
+.new-background {
+    background-color: #ffe6f2; /* Soft Pink Background */
 }
 
 /* Page 1 (Cover) */
 .cover-page {
     background: linear-gradient(to top right, #ffe6e6, #ffcccc);
+    /* Re-center content on the cover page */
+    justify-content: center;
 }
 
 .cake-illustration {
     width: 150px;
     height: 150px;
     margin-bottom: 20px;
-    /* Placeholder for cake image/SVG */
     background: url('assets/cake.png') center/contain no-repeat; 
 }
 
@@ -226,21 +235,38 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none; /* Allow clicks to pass through */
+    pointer-events: none;
     overflow: hidden;
     z-index: 200;
+}
+
+/* Score Counter */
+#score-counter {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+    z-index: 400; 
+    pointer-events: none;
 }
 
 /* Balloon base style (for JS injection) */
 .balloon {
     position: absolute;
-    width: 60px;
-    height: 80px;
-    background-color: var(--red-primary); /* Color will change via JS */
+    width: 100px; 
+    height: 130px; 
+    background-color: var(--red-primary);
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-    bottom: -100px; /* Start off-screen */
+    bottom: -100px;
     animation: rise 5s linear forwards;
     opacity: 0.8;
+    pointer-events: auto;
+    cursor: pointer;
 }
 
 .balloon::after {
@@ -253,6 +279,68 @@ body {
     top: 100%;
     left: calc(50% - 1px);
 }
+
+/* Style for scattered pictures */
+.scatter-pic {
+    position: absolute;
+    width: 80px;  
+    height: 80px; 
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    opacity: 1;
+    z-index: 300; 
+}
+
+/* Heart Message Wrapper */
+#blast-message-wrapper {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 350;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#blast-message {
+    background: yellow;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* CSS for the animated heart */
+.heart-icon {
+    position: relative;
+    width: 50px;
+    height: 45px;
+    background-color: var(--red-primary);
+    transform: rotate(-45deg);
+    animation: pulse 1s infinite;
+}
+.heart-icon::before,
+.heart-icon::after {
+    content: "";
+    position: absolute;
+    width: 50px;
+    height: 45px;
+    background-color: var(--red-primary);
+    border-radius: 50%;
+}
+.heart-icon::before {
+    top: -25px;
+    left: 0;
+}
+.heart-icon::after {
+    left: 25px;
+    top: 0;
+}
+
 
 /* Keyframe for Balloon Rising */
 @keyframes rise {
@@ -270,4 +358,65 @@ body {
     0% { transform: scale(1); }
     50% { transform: scale(1.05); }
     100% { transform: scale(1); }
+}
+
+/* =========================================
+   6. BIRTHDAY TEXT ANIMATION
+   ========================================= */
+.birthday-text-group {
+    position: absolute;
+    bottom: 0; 
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 250; 
+    pointer-events: none; 
+}
+
+.birthday-text {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    margin-bottom: 15px; 
+    opacity: 0;
+    transform: translateY(100px); 
+    animation: textRiseAndFade 5s ease-out forwards;
+}
+
+.birthday-text:nth-child(1) {
+    font-size: 3em;
+    color: var(--red-primary);
+}
+.birthday-text:nth-child(2) {
+    font-size: 2.5em;
+    color: var(--blue-accent);
+}
+.birthday-text:nth-child(3) {
+    font-size: 3.5em;
+    color: var(--pink-secondary);
+}
+.birthday-text:nth-child(4) {
+    font-size: 2em;
+    color: #ffe66d; 
+}
+
+@keyframes textRiseAndFade {
+    0% {
+        opacity: 0;
+        transform: translateY(200px) scale(0.8);
+    }
+    10% {
+        opacity: 1;
+        transform: translateY(0px) scale(1);
+    }
+    90% {
+        opacity: 1;
+        transform: translateY(0px) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-200px) scale(0.8); 
+    }
 }
