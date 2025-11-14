@@ -80,19 +80,25 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (currentPageElement && currentPageIndex < TOTAL_PAGES) {
             
+            // 1. Instantly START the flip animation
             currentPageElement.classList.add('is-flipped');
             
+            // 2. Use setTimeout to wait exactly FLIP_DURATION (0.5s)
             setTimeout(() => { 
                 
+                // 3. Update the index and classes ONLY AFTER the animation time has passed
                 currentPageIndex++;
                 
+                // Remove active class from the page that just finished flipping
                 currentPageElement.classList.remove('active-page');
                 
+                // Add active class to the new top page
                 const nextPageElement = pages[currentPageIndex];
                 if (nextPageElement) {
                     nextPageElement.classList.add('active-page');
                 }
 
+                // Check if we hit the end
                 if (currentPageIndex === TOTAL_PAGES) {
                     removePageFlipListeners();
                 }
@@ -135,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         balloon.style.left = `${randomX}px`;
         balloon.style.backgroundColor = randomColor;
 
-        const randomDuration = Math.random() * 4 + 8; // Slower rise time
+        const randomDuration = Math.random() * 4 + 8;
         balloon.style.animationDuration = `${randomDuration}s`;
         
         celebrationContainer.appendChild(balloon);
@@ -144,7 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // 2. Pop when animation ends (reaches top)
         balloon.addEventListener('animationend', () => {
             if (activeBalloons.has(balloonId)) { 
-                // Calls the full blast function (sound + scatter)
                 blastBalloon(balloon); 
             }
         }, { once: true });
@@ -161,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (blastedBalloonsCount === 1) { 
             displayInstructionalMessage(FINAL_POP_COUNT_MESSAGE);
-            // Hide the instruction message upon first pop
             setTimeout(hideInstructionalMessage, 50); 
         }
 
@@ -201,7 +205,13 @@ document.addEventListener('DOMContentLoaded', () => {
         wrapper.appendChild(msg);
         celebrationContainer.appendChild(wrapper);
 
-        // Message stays fixed, and is hidden by the blastBalloon function
+        setTimeout(() => {
+            wrapper.style.opacity = '0';
+            wrapper.style.transition = 'opacity 1s ease-out';
+        }, 5000); 
+        setTimeout(() => {
+            if (wrapper.parentElement) celebrationContainer.removeChild(wrapper);
+        }, 6000);
     }
     
     function hideInstructionalMessage() {
@@ -299,6 +309,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- INITIALIZATION ---
+
     splashScreen.addEventListener('click', startSequence, { once: true });
+    
     closeButton.addEventListener('click', startCelebration);
 });
