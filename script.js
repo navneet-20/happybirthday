@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPageIndex = 1; // Start at page 1
 
     // --- CONFIGURATION ---
-    const SPLASH_DURATION = 3000; // 3 seconds
+    const SPLASH_DURATION = 1000; // 1 seconds
     const BALLOON_COLORS = ['#ff4d4d', '#1e90ff', '#ff9ff3', '#ffe66d']; // Red, Blue, Pink, Yellow
     const NUM_BALLOONS = 10;
     const TOTAL_PAGES = pages.length;
